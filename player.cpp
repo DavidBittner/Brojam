@@ -5,14 +5,17 @@
 #include <iostream>
 
 #include "coord.cpp"
+#include "bullet.cpp"
 
-static const int PLY_SIZE = 10;
+static const int PLY_SIZE = 50;
 
+//Player class for handling the intersactions of the player.
 class Player
 {
 
 	public:
 
+		//Constructor for establishing the bases for different variables
 		Player( float size, float accel )
 		{ 
 		
@@ -27,31 +30,8 @@ class Player
 
 		};
 
-		void Move()
-		{
-
-			KeyOps();
-
-			yVel -= mapAccel/6.0f;
-			mag += yVel;
-
-			Coord origin( 0, 0 );
-
-			plyPos->x = (cos( curAngle )*mapSize)+cos(curAngle)*mag;
-			plyPos->y = (sin( curAngle )*mapSize)+sin(curAngle)*mag;
-
-			if( GetDist( *plyPos, origin ) < mapSize )
-			{
-
-				yVel = 0.0f;
-				mag = 0.0f;
-
-				plyPos->x = (cos( curAngle )*mapSize)+cos(curAngle)*mag;
-				plyPos->y = (sin( curAngle )*mapSize)+sin(curAngle)*mag;
-
-			}
-
-		}
+		//Function for handling moving code
+		void Move();
 
 		void SetSize( float size ){ mapSize = size; };
 		void SetAccel( float accel ){ mapAccel = accel; }
@@ -62,15 +42,7 @@ class Player
 
 	private:
 
-		float GetDist( Coord a, Coord b )
-		{
-
-			return sqrt( pow( a.x-b.x, 2 ) + pow( a.y-b.y, 2 ) );
-
-		}
-
 		Coord RotateVector( Coord in, float rotateAngle );
-		float GetInclin( Coord a, Coord b );
 
 		void KeyOps();
 
@@ -113,32 +85,8 @@ void Player::Draw()
 	
 	glDisableClientState( GL_VERTEX_ARRAY );
 
+	Test->Draw();
 
-}
-
-float Player::GetInclin( Coord a, Coord b )
-{
-
-	float deltax = b.x - a.x;
-	float deltay = b.y - a.y;
-
-	float ang = atan( deltay/deltax );
-
-	if( deltax < 0 )
-	{
-
-		ang+=(PI);
-
-	}
-
-	if( ang < 0 )
-	{
-
-		ang+=(2*PI);
-
-	}
-
-	return ang;
 
 }
 
@@ -180,6 +128,34 @@ void Player::KeyOps()
 		yVel = 15.0f;
 
 	}
+
+}
+
+void Player::Move()
+{
+
+	KeyOps();
+
+	yVel -= mapAccel/6.0f;
+	mag += yVel;
+
+	Coord origin( 0, 0 );
+
+	plyPos->x = (cos( curAngle )*mapSize)+cos(curAngle)*mag;
+	plyPos->y = (sin( curAngle )*mapSize)+sin(curAngle)*mag;
+
+	if( GetDist( *plyPos, origin ) < mapSize )
+	{
+
+		yVel = 0.0f;
+		mag = 0.0f;
+
+		plyPos->x = (cos( curAngle )*mapSize)+cos(curAngle)*mag;
+		plyPos->y = (sin( curAngle )*mapSize)+sin(curAngle)*mag;
+
+	}
+
+	Test->Move();
 
 }
 

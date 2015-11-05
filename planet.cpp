@@ -5,8 +5,6 @@
 #include <cmath>
 #include <vector>
 
-const float PI = 3.14159;
-
 class Planet
 {
 
