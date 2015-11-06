@@ -11,22 +11,29 @@ const int WIND_HEIGHT = 600;
 
 const int FRAMES_PER_SECOND = 60.0f;
 
+Coord *camera;
+
 int main()
 {
 	
 	glfwInit();
+
+	glfwWindowHint( GLFW_SAMPLES, 8 );
 	GLFWwindow *window = glfwCreateWindow( WIND_WIDTH, WIND_HEIGHT, "Tiny World", nullptr, nullptr );
 
 	glfwMakeContextCurrent( window );
 	glfwSwapInterval( 1 );
+
 
 	Reshape( window, WIND_WIDTH, WIND_HEIGHT );
 	glfwSetWindowSizeCallback( window, Reshape );
 
 	glfwSetKeyCallback( window, KeyFunc );
 
-	Planet TempPlanet( 200, 2 );
+	Planet TempPlanet( 512, 4 );
 	Player TempPlayer( TempPlanet.GetSize(), TempPlanet.GetMass() );
+
+	camera = TempPlayer.GetPos();
 
 	int stime = 0.0f, etime = 0.0f;
 
@@ -38,7 +45,7 @@ int main()
 		glClear( GL_COLOR_BUFFER_BIT );
 		glLoadIdentity();
 
-		glTranslatef( 0.0f, 0.0f, -1.0f );
+		glTranslatef( -camera->x, -camera->y, -1.0f );
 		TempPlanet.Draw();
 
 		TempPlayer.Draw();
