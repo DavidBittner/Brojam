@@ -9,7 +9,10 @@ const float PI = 3.14159;
 
 bool *keyStates = new bool[256];
 bool *keyPresses = new bool[256];
+
 Coord mousePos( 0, 0 );
+bool mouseButton = false;
+bool mouseClick = false;
 
 void Reshape( GLFWwindow *wind, int width, int height )
 {
@@ -32,7 +35,7 @@ void KeyFunc( GLFWwindow *window, int key, int scancode, int action, int mods )
 
 		keyStates[key] = true;
 
-		if( keyPresses[key] != true )
+		if( !keyPresses[key] )
 		{
 
 			keyPresses[key] = true;
@@ -96,11 +99,30 @@ float GetInclin( Coord a, Coord b )
 
 }
 
-void MotionFunc( int x, int y )
+void MotionFunc( GLFWwindow *wind, int x, int y )
 {
 
 	mousePos.x = x;
 	mousePos.y = y;
+
+}
+
+void MouseFunc( GLFWwindow *wind, int button, int action, int mods )
+{
+
+	if( button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS )
+	{
+
+		mouseButton = true;
+
+		if( !mouseClick )
+		{
+
+			mouseClick = true;
+
+		}
+
+	}
 
 }
 

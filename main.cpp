@@ -30,7 +30,10 @@ int main()
 
 	glfwSetKeyCallback( window, KeyFunc );
 
-	Planet TempPlanet( 512, 4 );
+	//glfwSetCursorPosCallback( window, MotionFunc );
+	//glfwSetMouseButtonCallback( window, MouseFunc );
+
+	Planet TempPlanet( 512, 1 );
 	Player TempPlayer( TempPlanet.GetSize(), TempPlanet.GetMass() );
 
 	camera = TempPlayer.GetPos();
