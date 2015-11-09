@@ -22,7 +22,6 @@ int main()
 	glfwMakeContextCurrent( window );
 	glfwSwapInterval( 1 );
 
-
 	Reshape( window, WIND_WIDTH, WIND_HEIGHT );
 	glfwSetWindowSizeCallback( window, Reshape );
 
