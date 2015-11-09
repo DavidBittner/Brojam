@@ -2,6 +2,9 @@
 #define GLFW_FUNCS
 
 #include <cmath>
+#include <GL/glfw3.h>
+
+#include <iostream>
 
 #include "coord.cpp"
 
@@ -9,6 +12,8 @@ const float PI = 3.14159;
 
 bool *keyStates = new bool[256];
 bool *keyPresses = new bool[256];
+
+Coord *camera = new Coord( 0, 0 );
 
 Coord mousePos( 0, 0 );
 bool mouseButton = false;
@@ -64,6 +69,8 @@ void ResetKeys()
 
 	}
 
+    mouseClick = false;
+
 }
 
 float GetDist( Coord a, Coord b )
@@ -99,11 +106,17 @@ float GetInclin( Coord a, Coord b )
 
 }
 
-void MotionFunc( GLFWwindow *wind, int x, int y )
+void MotionFunc( GLFWwindow *wind, double x, double y )
 {
 
-	mousePos.x = x;
-	mousePos.y = y;
+    int w, h;
+    glfwGetWindowSize( glfwGetCurrentContext(), &w, &h );
+
+    //Relative calcuations so the mouse lines up with the camera.
+	mousePos.x = (x-(w/2)) + camera->x;
+	mousePos.y = ((h-y)-(h/2)) + camera->y;
+
+    std::cout << mousePos.x << "," << mousePos.y << std::endl;
 
 }
 

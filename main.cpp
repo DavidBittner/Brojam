@@ -11,8 +11,6 @@ const int WIND_HEIGHT = 600;
 
 const int FRAMES_PER_SECOND = 60.0f;
 
-Coord *camera;
-
 int main()
 {
 	
@@ -29,6 +27,9 @@ int main()
 	glfwSetWindowSizeCallback( window, Reshape );
 
 	glfwSetKeyCallback( window, KeyFunc );
+
+    glfwSetCursorPosCallback( window, MotionFunc );
+    glfwSetMouseButtonCallback( window, MouseFunc ); 
 
 	Planet TempPlanet( 512, 5 );
 	Player TempPlayer( TempPlanet.GetSize(), TempPlanet.GetMass() );

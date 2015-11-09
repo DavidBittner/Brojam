@@ -11,6 +11,8 @@ class Bullet
 	public:
 		Bullet( Coord ply, float ang, float vel, float decel );
 
+        Coord GetPos(){ return pos; }
+
 		void Move();
 		void Draw();
 
@@ -24,6 +26,8 @@ class Bullet
 
 Bullet::Bullet( Coord ply, float ang, float vel, float decel ) : pos( 0, 0 )
 {
+
+    std::cout << ang*(180/PI) << std::endl;
 
 	xvel = cos( ang )*vel;
 	yvel = sin( ang )*vel;

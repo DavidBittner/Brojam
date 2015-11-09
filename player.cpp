@@ -4,6 +4,8 @@
 #include <GL/glfw3.h>
 #include <iostream>
 
+#include <vector>
+
 #include "coord.cpp"
 #include "bullet.cpp"
 
@@ -46,6 +48,8 @@ class Player
 
 		void KeyOps();
 
+        std::vector< Bullet* > bullets;
+
 		Coord *plyPos;
 		float curAngle;
 
@@ -84,6 +88,13 @@ void Player::Draw()
 	glDrawArrays( GL_TRIANGLE_FAN, 0, verts.size()/2 );
 	
 	glDisableClientState( GL_VERTEX_ARRAY );
+
+    for( Bullet *i : bullets )
+    {
+
+        i->Draw();
+
+    }
 
 }
 
@@ -126,6 +137,13 @@ void Player::KeyOps()
 
 	}
 
+    if( mouseClick )
+    {
+
+        bullets.push_back( new Bullet( *plyPos, GetInclin( *plyPos, mousePos ), 40.0f, mapAccel ) );
+
+    }
+
 }
 
 void Player::Move()
@@ -151,6 +169,24 @@ void Player::Move()
 		plyPos->y = (sin( curAngle )*mapSize)+sin(curAngle)*mag;
 
 	}
+
+    int temp = 0;
+    for( Bullet *i : bullets )
+    {
+
+        if( GetDist( i->GetPos(), Coord( 0, 0 ) ) < mapSize )
+        {
+
+            delete bullets.at(temp);
+            bullets.erase( bullets.begin() + temp );
+
+        }
+
+        i->Move();
+
+        temp++;
+
+    }
 
 }
 
