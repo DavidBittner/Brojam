@@ -137,7 +137,7 @@ void Player::KeyOps()
 
 	}
 
-    if( mouseClick )
+    if( mouseButton )
     {
 
         bullets.push_back( new Bullet( *plyPos, GetInclin( *plyPos, mousePos ), 40.0f, mapAccel ) );
@@ -170,21 +170,20 @@ void Player::Move()
 
 	}
 
-    int temp = 0;
-    for( Bullet *i : bullets )
+    for( int i = 0; i < bullets.size(); i++ )
     {
 
-        if( GetDist( i->GetPos(), Coord( 0, 0 ) ) < mapSize )
+        bullets.at(i)->Move();
+
+        if( GetDist( bullets.at(i)->GetPos(), Coord( 0, 0 ) ) < mapSize )
         {
 
-            //delete bullets.at(temp);
-            bullets.erase( bullets.begin() + temp );
+            Bullet *point = bullets.at( i );
+            bullets.erase( bullets.begin() + i );
+
+            delete point;
 
         }
-
-        i->Move();
-
-        temp++;
 
     }
 

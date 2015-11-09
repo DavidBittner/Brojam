@@ -133,7 +133,12 @@ void MouseFunc( GLFWwindow *wind, int button, int action, int mods )
 
 		}
 
-	}
+	}else if( button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE )
+    {
+
+        mouseButton = false;
+
+    }
 
 }
 
