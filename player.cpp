@@ -25,7 +25,7 @@ class Player
 			plyPos = new Coord( size, 0.0f );
 			curAngle = 0.0f;
 
-			yVel = 0.0f;
+            yVel = 0.0f;
 			mag = 0.0f;
 
 		};
