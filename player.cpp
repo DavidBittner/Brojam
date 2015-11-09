@@ -177,7 +177,7 @@ void Player::Move()
         if( GetDist( i->GetPos(), Coord( 0, 0 ) ) < mapSize )
         {
 
-            delete bullets.at(temp);
+            //delete bullets.at(temp);
             bullets.erase( bullets.begin() + temp );
 
         }

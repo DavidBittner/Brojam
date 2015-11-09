@@ -116,8 +116,6 @@ void MotionFunc( GLFWwindow *wind, double x, double y )
 	mousePos.x = (x-(w/2)) + camera->x;
 	mousePos.y = ((h-y)-(h/2)) + camera->y;
 
-    std::cout << mousePos.x << "," << mousePos.y << std::endl;
-
 }
 
 void MouseFunc( GLFWwindow *wind, int button, int action, int mods )
