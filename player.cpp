@@ -82,20 +82,6 @@ void Player::Draw()
 
 	}
 
-    verts.push_back( plyPos->x );
-    verts.push_back( plyPos->y );
-
-    float tempAng = GetInclin( *plyPos, mousePos );
-
-    verts.push_back( plyPos->x+cos(tempAng)*100 );
-    verts.push_back( plyPos->y ); 
-
-    verts.push_back( plyPos->x+cos(tempAng)*100 );
-    verts.push_back( plyPos->y+sin(tempAng)*100 );
-
-    verts.push_back( plyPos->x );
-    verts.push_back( plyPos->y+sin( tempAng )*100 );
-	
     glEnableClientState( GL_VERTEX_ARRAY );
 
 	glVertexPointer( 2, GL_FLOAT, 0, verts.data() );
