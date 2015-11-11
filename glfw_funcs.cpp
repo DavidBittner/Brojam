@@ -15,6 +15,7 @@ bool *keyPresses = new bool[256];
 
 Coord *camera = new Coord( 0, 0 );
 
+Coord mouseRef( 0, 0 );
 Coord mousePos( 0, 0 );
 bool mouseButton = false;
 bool mouseClick = false;
@@ -71,6 +72,13 @@ void ResetKeys()
 
     mouseClick = false;
 
+	int w, h;
+    glfwGetWindowSize( glfwGetCurrentContext(), &w, &h );
+
+    mousePos.x = (mouseRef.x-(w/2)) + camera->x;
+	mousePos.y = ((h-mouseRef.y)-(h/2)) + camera->y;
+
+
 }
 
 float GetDist( Coord a, Coord b )
@@ -109,13 +117,10 @@ float GetInclin( Coord a, Coord b )
 void MotionFunc( GLFWwindow *wind, double x, double y )
 {
 
-    int w, h;
-    glfwGetWindowSize( glfwGetCurrentContext(), &w, &h );
+    mouseRef.x = x;
+    mouseRef.y = y;
 
     //Relative calcuations so the mouse lines up with the camera.
-	mousePos.x = (x-(w/2)) + camera->x;
-	mousePos.y = ((h-y)-(h/2)) + camera->y;
-
 }
 
 void MouseFunc( GLFWwindow *wind, int button, int action, int mods )
