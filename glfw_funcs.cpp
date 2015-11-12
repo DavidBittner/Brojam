@@ -114,6 +114,23 @@ float GetInclin( Coord a, Coord b )
 
 }
 
+Coord RotateVector( Coord in, float rotationangle )
+{
+
+	float inclin = GetInclin( Coord( 0, 0 ), in );
+	float mag = sqrt(pow(in.x,2)+pow(in.y,2));
+
+	inclin+=rotationangle;
+
+	Coord temp( 0.0f, 0.0f );
+
+	temp.x = cos( inclin )*mag;
+	temp.y = sin( inclin )*mag;
+
+	return temp;
+
+}
+
 void MotionFunc( GLFWwindow *wind, double x, double y )
 {
 

@@ -44,8 +44,6 @@ class Player
 
 	private:
 
-		Coord RotateVector( Coord in, float rotateAngle );
-
 		void KeyOps();
 
         std::vector< Bullet* > bullets;
@@ -98,23 +96,6 @@ void Player::Draw()
 
 }
 
-Coord Player::RotateVector( Coord in, float rotationangle )
-{
-
-	float inclin = GetInclin( Coord( 0, 0 ), in );
-	float mag = sqrt(pow(in.x,2)+pow(in.y,2));
-
-	inclin+=rotationangle;
-
-	Coord temp( 0.0f, 0.0f );
-
-	temp.x = cos( inclin )*mag;
-	temp.y = sin( inclin )*mag;
-
-	return temp;
-
-}
-
 void Player::KeyOps()
 {
 
@@ -139,10 +120,14 @@ void Player::KeyOps()
 
     Coord *tempCord = new Coord( plyPos->x + cos(curAngle)*(PLY_SIZE/2), plyPos->y + sin(curAngle)*(PLY_SIZE/2) );
 
-    if( mouseButton )
+    if( mouseClick )
     {
 
-        bullets.push_back( new Bullet( *tempCord, GetInclin( *plyPos, mousePos ), 40.0f, mapAccel ) );
+        float varyAng = (rand()%10)-5;
+        varyAng = varyAng*(PI/180);
+
+        bullets.push_back( new Bullet( *tempCord, GetInclin( *plyPos, mousePos )+varyAng, 40.0f, mapAccel, mapSize ) );
+
 
     }
 

@@ -9,7 +9,7 @@ class Bullet
 {
 	
 	public:
-		Bullet( Coord ply, float ang, float vel, float decel );
+		Bullet( Coord ply, float ang, float vel, float decel, float size );
 
         Coord GetPos(){ return pos; }
 
@@ -19,12 +19,12 @@ class Bullet
 	private:
 
 		float xvel, yvel;
-		float decel;
+		float decel, size;
 		Coord pos;
 
 };
 
-Bullet::Bullet( Coord ply, float ang, float vel, float decel ) : pos( 0, 0 )
+Bullet::Bullet( Coord ply, float ang, float vel, float decel, float size ) : pos( 0, 0 )
 {
 
 	xvel = cos( ang )*vel;
@@ -33,6 +33,7 @@ Bullet::Bullet( Coord ply, float ang, float vel, float decel ) : pos( 0, 0 )
 	pos.x = ply.x;
 	pos.y = ply.y;
 
+    this->size = size;
 	this->decel = decel;
 
 }
@@ -56,11 +57,32 @@ void Bullet::Move()
 void Bullet::Draw()
 {
 
-	glPointSize( 15 );
+    std::vector<float> verts;
 
-	glBegin( GL_POINTS );
-		glVertex2f( pos.x, pos.y );
-	glEnd();
+    std::vector< Coord > corners;
+    corners.push_back( Coord( -5, -1 ) );
+	corners.push_back( Coord( 5, -1 ) );
+	corners.push_back( Coord( 5, 1 ) );
+	corners.push_back( Coord( -5, 1 ) );
+	
+    for( int i = 0; i < 4; i++ )
+    {
+ 
+        float tempAng = atan( yvel/xvel );
+
+        corners.at(i) = RotateVector( corners.at(i), tempAng );
+
+        verts.push_back( corners.at(i).x + pos.x );
+        verts.push_back( corners.at(i).y + pos.y );
+
+    }
+
+    glEnableClientState( GL_VERTEX_ARRAY );
+    
+    glVertexPointer( 2, GL_FLOAT, 0, verts.data() );
+    glDrawArrays( GL_QUADS, 0, verts.size()/2 );
+
+    glDisableClientState( GL_VERTEX_ARRAY );
 
 }
 

@@ -2,7 +2,6 @@
 #include <thread>
 
 #include "glfw_funcs.cpp"
-
 #include "planet.cpp"
 #include "player.cpp"
 
