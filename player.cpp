@@ -137,10 +137,12 @@ void Player::KeyOps()
 
 	}
 
+    Coord *tempCord = new Coord( plyPos->x + cos(curAngle)*(PLY_SIZE/2), plyPos->y + sin(curAngle)*(PLY_SIZE/2) );
+
     if( mouseButton )
     {
 
-        bullets.push_back( new Bullet( *plyPos, GetInclin( *plyPos, mousePos ), 40.0f, mapAccel ) );
+        bullets.push_back( new Bullet( *tempCord, GetInclin( *plyPos, mousePos ), 40.0f, mapAccel ) );
 
     }
 
