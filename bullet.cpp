@@ -40,7 +40,7 @@ Bullet::Bullet( Coord ply, float ang, float vel, float decel, float size ) : pos
     this->size = size;
 	this->decel = decel;
 
-    partCont = new ParticleController( &pos, 20, 20, 0.0f, 2*PI, 10.0f );
+    partCont = new ParticleController( &pos, 20, 20, PI/4, 10.0f );
 
 }
 
@@ -58,18 +58,22 @@ void Bullet::Move()
 	pos.x+=xvel;
 	pos.y+=yvel;
 
+    partCont->Move();
+
 }
 
 void Bullet::Draw()
 {
 
+    partCont->Draw();
+
     std::vector<float> verts;
 
     std::vector< Coord > corners;
-    corners.push_back( Coord( -5, -1 ) );
-	corners.push_back( Coord( 5, -1 ) );
-	corners.push_back( Coord( 5, 1 ) );
-	corners.push_back( Coord( -5, 1 ) );
+    corners.push_back( Coord( -5, -2 ) );
+	corners.push_back( Coord( 5, -2 ) );
+	corners.push_back( Coord( 5, 2 ) );
+	corners.push_back( Coord( -5, 2 ) );
 	
     for( int i = 0; i < 4; i++ )
     {

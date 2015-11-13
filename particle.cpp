@@ -17,7 +17,7 @@ class Particle
     private:
         Coord *pos;
 
-        Coord *corners;        
+        std::vector< Coord > corners;        
 
         float mag;
         float ang;
@@ -36,6 +36,8 @@ Particle::Particle( Coord sourcePos, float mag, float ang )
 
 void Particle::Move()
 {
+    
+    corners.clear();
 
     pos->x += cos( ang )*mag;
     pos->y += sin( ang )*mag;
@@ -45,7 +47,12 @@ void Particle::Move()
 Coord *Particle::GetCorners()
 {
 
-    return corners;
+    corners.push_back( Coord( pos->x, pos->y ) );
+    corners.push_back( Coord( pos->x+5, pos->y ) );
+    corners.push_back( Coord( pos->x+5, pos->y+5 ) );
+    corners.push_back( Coord( pos->x, pos->y+5 ) );
+
+    return corners.data();
 
 }
 

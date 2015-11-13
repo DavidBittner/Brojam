@@ -63,6 +63,13 @@ int main()
 
         frame++;
 
+        if( frame == FRAMES_PER_SECOND )
+        {
+
+            frame = 0;
+
+        }
+
 	}
 
 	glfwTerminate();
