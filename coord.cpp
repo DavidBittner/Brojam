@@ -6,8 +6,8 @@ struct Coord
 
 	float x, y;
 	
-	template<class dattype>
-	Coord( dattype x, dattype y )
+	template<class dattype, class secdattype >
+	Coord( dattype x, secdattype y )
 	{ 
 		this->x = x; 
 		this->y = y; 

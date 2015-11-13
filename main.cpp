@@ -8,8 +8,6 @@
 const int WIND_WIDTH = 800;
 const int WIND_HEIGHT = 600;
 
-const int FRAMES_PER_SECOND = 60.0f;
-
 int main()
 {
 	
@@ -62,6 +60,8 @@ int main()
 			std::this_thread::sleep_for( std::chrono::milliseconds( (1000/FRAMES_PER_SECOND)-(etime-stime) ) );
 
 		}
+
+        frame++;
 
 	}
 

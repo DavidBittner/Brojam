@@ -20,6 +20,10 @@ Coord mousePos( 0, 0 );
 bool mouseButton = false;
 bool mouseClick = false;
 
+int frame = 0;
+
+const int FRAMES_PER_SECOND = 60.0f;
+
 void Reshape( GLFWwindow *wind, int width, int height )
 {
 	

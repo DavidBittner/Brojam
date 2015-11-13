@@ -162,7 +162,7 @@ void Player::Move()
 
         bullets.at(i)->Move();
 
-        if( GetDist( bullets.at(i)->GetPos(), Coord( 0, 0 ) ) < mapSize )
+        if( GetDist( *bullets.at(i)->GetPos(), Coord( 0, 0 ) ) < mapSize )
         {
 
             Bullet *point = bullets.at( i );

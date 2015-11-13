@@ -4,6 +4,8 @@
 #include "coord.cpp"
 #include "glfw_funcs.cpp"
 
+#include "particle_controller.cpp"
+
 //Bullet class for handling their movement/drawing
 class Bullet
 {
@@ -11,7 +13,7 @@ class Bullet
 	public:
 		Bullet( Coord ply, float ang, float vel, float decel, float size );
 
-        Coord GetPos(){ return pos; }
+        Coord *GetPos(){ return &pos; }
 
 		void Move();
 		void Draw();
@@ -21,6 +23,8 @@ class Bullet
 		float xvel, yvel;
 		float decel, size;
 		Coord pos;
+
+        ParticleController *partCont;
 
 };
 
@@ -35,6 +39,8 @@ Bullet::Bullet( Coord ply, float ang, float vel, float decel, float size ) : pos
 
     this->size = size;
 	this->decel = decel;
+
+    partCont = new ParticleController( &pos, 20, 20, 0.0f, 2*PI, 10.0f );
 
 }
 
