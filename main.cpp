@@ -27,12 +27,20 @@ int main()
     glfwSetCursorPosCallback( window, MotionFunc );
     glfwSetMouseButtonCallback( window, MouseFunc ); 
 
-	Planet TempPlanet( 512, 10 );
+    srand(time(nullptr));
+
+    //Randomizing the size and gravity of the planet.
+    int size = (rand()%512)+256;
+    int gravity = (rand()%8)+2;
+
+	Planet TempPlanet( size, gravity );
 	Player TempPlayer( TempPlanet.GetSize(), TempPlanet.GetMass() );
 
+    //Point the camera to the player's position.
 	camera = TempPlayer.GetPos();
 
-	int stime = 0.0f, etime = 0.0f;
+    //Just for frame capping.
+	float stime = 0.0f, etime = 0.0f;
 
 	while( !glfwWindowShouldClose( window ) )
 	{
