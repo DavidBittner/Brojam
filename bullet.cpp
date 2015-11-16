@@ -40,7 +40,7 @@ Bullet::Bullet( Coord ply, float ang, float vel, float decel, float size ) : pos
     this->size = size;
 	this->decel = decel;
 
-    partCont = new ParticleController( &pos, 20, 20, PI/4, 10.0f );
+    partCont = new ParticleController( &pos, 1000.0f, 20, PI/4, ang, 10.0f );
 
 }
 
@@ -74,12 +74,13 @@ void Bullet::Draw()
 	corners.push_back( Coord( 5, -2 ) );
 	corners.push_back( Coord( 5, 2 ) );
 	corners.push_back( Coord( -5, 2 ) );
-	
+
+	float tempAng = atan( yvel/xvel );
+    partCont->SetAng( tempAng );
+
     for( int i = 0; i < 4; i++ )
     {
  
-        float tempAng = atan( yvel/xvel );
-
         corners.at(i) = RotateVector( corners.at(i), tempAng );
 
         verts.push_back( corners.at(i).x + pos.x );

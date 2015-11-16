@@ -13,7 +13,7 @@ int main()
 	
 	glfwInit();
 
-	glfwWindowHint( GLFW_SAMPLES, 8 );
+	glfwWindowHint( GLFW_SAMPLES, 2 );
 	GLFWwindow *window = glfwCreateWindow( WIND_WIDTH, WIND_HEIGHT, "Tiny World", nullptr, nullptr );
 
 	glfwMakeContextCurrent( window );

@@ -10,11 +10,13 @@ class ParticleController
 {
 
     public:
-        ParticleController( Coord *sourcePos, int lifeSpan, int prodRate, float angVary, float speed ); 
+        ParticleController( Coord *sourcePos, float lifeSpan, int prodRate, float angVary, float createAng, float speed ); 
 
         void Draw();
         void Move();
 
+        void SetAng( float ang ){ this->createAng = ang; }
+    
     private:
         std::vector<Particle> particles;
 
@@ -23,20 +25,26 @@ class ParticleController
         float angVary;
         float speed;
 
+        float createAng;
+
         int prodRate;
+
+        float lifeSpan;
 
 };
 
-ParticleController::ParticleController( Coord *sourcePos, int lifeSpan, int prodRate, float angVary, float speed )
+ParticleController::ParticleController( Coord *sourcePos, float lifeSpan, int prodRate, float angVary, float createAng, float speed )
 {
 
     this->angVary = angVary;
+    this->createAng = createAng;
 
     this->sourcePos = sourcePos;
 
     this->speed = speed;
-
     this->prodRate = prodRate;
+
+    this->lifeSpan = lifeSpan;
 
 }
 
@@ -48,12 +56,12 @@ void ParticleController::Move()
     if( !(frame%doesProduce) )
     {
 
-        std::cout << angVary << std::endl;
+        float randAng = rand()%((int)(angVary*(180/PI)));
+        randAng*=(PI/180);
+        
+        randAng = randAng-(angVary/2);
 
-        float ang = rand()%(int)(angVary*(180/PI));
-
-        std::cout << ang << std::endl;
-        particles.push_back( Particle( *sourcePos, speed, ang ) ); 
+        particles.push_back( Particle( *sourcePos, speed, randAng+createAng, lifeSpan ) ); 
 
     }
     
@@ -61,6 +69,14 @@ void ParticleController::Move()
     {
 
         particles.at(i).Move();
+
+        if( !particles.at(i).IsAlive() )
+        {
+
+            particles.erase( particles.begin()+i );
+            i--;
+
+        }
 
     }
 
@@ -70,6 +86,7 @@ void ParticleController::Draw()
 {
 
     std::vector<float> verts;
+    std::vector<float> colors;
 
     for( int i = 0; i < particles.size(); i++ )
     {
@@ -82,14 +99,27 @@ void ParticleController::Draw()
             verts.push_back( temp[j].x );
             verts.push_back( temp[j].y );
 
+            for( int f = 0; f < 3; f++ )
+            {
+
+                colors.push_back( 1.0f-particles.at(i).GetLife() );
+
+            }
+
         }
 
     }
 
     glEnableClientState( GL_VERTEX_ARRAY );
+    glEnableClientState( GL_COLOR_ARRAY );
+    
     glVertexPointer( 2, GL_FLOAT, 0, verts.data() );
+    glColorPointer( 3, GL_FLOAT, 0, colors.data() );
+
     glDrawArrays( GL_QUADS, 0, verts.size()/2 );
+
     glDisableClientState( GL_VERTEX_ARRAY );
+    glDisableClientState( GL_COLOR_ARRAY );
 
 }
 
