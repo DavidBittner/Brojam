@@ -18,17 +18,21 @@ class Bullet
 		void Move();
 		void Draw();
 
+        Rect *GetRect(){ return &refRect; }
+
 	private:
 
 		float xvel, yvel;
 		float decel, size;
 		Coord pos;
 
+        Rect refRect;
+
         ParticleController *partCont;
 
 };
 
-Bullet::Bullet( Coord ply, float ang, float vel, float decel, float size ) : pos( 0, 0 )
+Bullet::Bullet( Coord ply, float ang, float vel, float decel, float size ) : pos( 0, 0 ), refRect( 0, 0 )
 {
 
 	xvel = cos( ang )*vel;
@@ -78,15 +82,62 @@ void Bullet::Draw()
 	float tempAng = atan( yvel/xvel );
     partCont->SetAng( tempAng );
 
+    float xmin, xmax;
+    float ymin, ymax;
+
     for( int i = 0; i < 4; i++ )
     {
- 
+
         corners.at(i) = RotateVector( corners.at(i), tempAng );
+
+        if( !i )
+        {
+
+            xmin = corners.at(i).x;
+            xmax = corners.at(i).x;
+            ymin = corners.at(i).y;
+            ymax = corners.at(i).y;
+
+        }
+
+        if( corners.at(i).x < xmin )
+        {
+
+            xmin = corners.at(i).x;
+
+        }
+
+        if( corners.at(i).x > xmax )
+        {
+
+            xmax = corners.at(i).x;
+
+        }
+
+        if( corners.at(i).y < ymin )
+        {
+
+            ymin = corners.at(i).y;
+
+        }
+
+        if( corners.at(i).y > ymax )
+        {
+
+            ymax = corners.at(i).y;
+
+        }
 
         verts.push_back( corners.at(i).x + pos.x );
         verts.push_back( corners.at(i).y + pos.y );
 
     }
+
+    refRect.w = abs( xmin - xmax );
+    refRect.h = abs( ymin - ymax );
+
+    refRect.x = xmin;
+    refRect.y = ymin;
 
     glEnableClientState( GL_VERTEX_ARRAY );
     

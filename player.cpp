@@ -18,7 +18,7 @@ class Player
 	public:
 
 		//Constructor for establishing the bases for different variables
-		Player( float size, float accel )
+		Player( float size, float accel ) : refRect( size, 0.0f )
 		{ 
 		
 			mapSize = size;
@@ -29,6 +29,9 @@ class Player
 
             yVel = 0.0f;
 			mag = 0.0f;
+
+            refRect.w = PLY_SIZE;
+            refRect.h = PLY_SIZE;
 
 		};
 
@@ -47,6 +50,8 @@ class Player
 		void KeyOps();
 
         std::vector< Bullet* > bullets;
+
+        Rect refRect;
 
 		Coord *plyPos;
 		float curAngle;
@@ -86,13 +91,6 @@ void Player::Draw()
 	glDrawArrays( GL_QUADS, 0, verts.size()/2 );
 	
 	glDisableClientState( GL_VERTEX_ARRAY );
-
-    for( Bullet *i : bullets )
-    {
-
-        i->Draw();
-
-    }
 
 }
 
@@ -161,6 +159,7 @@ void Player::Move()
     {
 
         bullets.at(i)->Move();
+        bullets.at(i)->Draw();
 
         if( GetDist( *bullets.at(i)->GetPos(), Coord( 0, 0 ) ) < mapSize )
         {
@@ -170,9 +169,18 @@ void Player::Move()
 
             delete point;
 
+        }else if( AABB( bullets.at(i)->GetRect(), &refRect ) )
+        {
+
+            glfwTerminate();
+
+
         }
 
     }
+
+    refRect.x = plyPos->x;
+    refRect.y = plyPos->y;
 
 }
 

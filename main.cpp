@@ -51,10 +51,11 @@ int main()
 		glLoadIdentity();
 
 		glTranslatef( -camera->x, -camera->y, -1.0f );
-		TempPlanet.Draw();
 
 		TempPlayer.Draw();
-		TempPlayer.Move();
+
+        TempPlayer.Move();
+		TempPlanet.Draw();
 
 		ResetKeys();
 		glfwPollEvents();
@@ -65,7 +66,7 @@ int main()
 		if( etime - stime < 1000.0f/FRAMES_PER_SECOND )
 		{
 
-			std::this_thread::sleep_for( std::chrono::milliseconds( (1000/FRAMES_PER_SECOND)-(etime-stime) ) );
+			std::this_thread::sleep_for( std::chrono::milliseconds( (int)((1000/FRAMES_PER_SECOND)-(etime-stime) )) );
 
 		}
 

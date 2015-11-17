@@ -24,6 +24,16 @@ int frame = 0;
 
 const int FRAMES_PER_SECOND = 60.0f;
 
+struct Rect
+{
+
+    Rect( float x, float y) { this->x = x; this->y = y; }
+
+    float x, y;
+    float w, h;
+
+};
+
 void Reshape( GLFWwindow *wind, int width, int height )
 {
 	
@@ -165,6 +175,23 @@ void MouseFunc( GLFWwindow *wind, int button, int action, int mods )
         mouseButton = false;
 
     }
+
+}
+
+bool AABB( Rect *a, Rect *b )
+{
+
+    if( a->x < b->x + b->w &&
+        a->x+a->w > b->x &&
+        a->y < b->y + b->h &&
+        a->y + a->h > b->y )
+    {
+
+        return true;
+
+    }
+
+    return false;
 
 }
 
