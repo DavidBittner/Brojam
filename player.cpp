@@ -136,7 +136,7 @@ void Player::KeyOps()
         float varyAng = (rand()%10)-5;
         varyAng = varyAng*(PI/180);
 
-        bullets.push_back( new Bullet( *tempCord, GetInclin( *plyPos, mousePos )+varyAng, 40.0f, mapAccel, mapSize ) );
+        bullets.push_back( new Bullet( *tempCord, GetInclin( *plyPos, mousePos )+varyAng, 32.0f, mapAccel, mapSize ) );
 
 
     }
@@ -191,6 +191,9 @@ void Player::Move()
 
             Bullet *point = bullets.at( i );
             bullets.erase( bullets.begin() + i );
+
+            curAngle += (cos(point->GetMovAng()))/5.0f;
+            yVel += sin(point->GetMovAng())*5.0f;
 
             delete point;
 

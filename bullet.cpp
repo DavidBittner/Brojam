@@ -18,6 +18,8 @@ class Bullet
 		void Move();
 		void Draw();
 
+        float GetMovAng(){ return atan( yvel/xvel ); }
+
         Rect *GetRect(){ return &refRect; }
 
 	private:
