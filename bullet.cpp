@@ -136,8 +136,8 @@ void Bullet::Draw()
     refRect.w = abs( xmin - xmax );
     refRect.h = abs( ymin - ymax );
 
-    refRect.x = xmin;
-    refRect.y = ymin;
+    refRect.x = pos.x;
+    refRect.y = pos.y;
 
     glEnableClientState( GL_VERTEX_ARRAY );
     

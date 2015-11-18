@@ -33,6 +33,8 @@ class Player
             refRect.w = PLY_SIZE;
             refRect.h = PLY_SIZE;
 
+            health = 1.0f;
+
 		};
 
 		//Function for handling moving code
@@ -62,12 +64,15 @@ class Player
 		float mapSize;
 		float mapAccel;
 
+        float health;
+
 };
 
 void Player::Draw()
 {
 
 	std::vector< float > verts;
+    std::vector< float > colors;
 
 	std::vector< Coord > corners;
 	corners.push_back( Coord( 0, PLY_SIZE/2 ) );
@@ -83,14 +88,21 @@ void Player::Draw()
 		verts.push_back( corners.at(i).x+plyPos->x );
 		verts.push_back( corners.at(i).y+plyPos->y );
 
+        colors.push_back( 1.0f-health );
+        colors.push_back( health );
+        colors.push_back( 0.0f );
+
 	}
 
     glEnableClientState( GL_VERTEX_ARRAY );
+    glEnableClientState( GL_COLOR_ARRAY );
 
 	glVertexPointer( 2, GL_FLOAT, 0, verts.data() );
+    glColorPointer( 3, GL_FLOAT, 0, colors.data() );
 	glDrawArrays( GL_QUADS, 0, verts.size()/2 );
 	
 	glDisableClientState( GL_VERTEX_ARRAY );
+    glDisableClientState( GL_COLOR_ARRAY );
 
 }
 
@@ -144,6 +156,9 @@ void Player::Move()
 	plyPos->x = (cos( curAngle )*mapSize)+cos(curAngle)*mag;
 	plyPos->y = (sin( curAngle )*mapSize)+sin(curAngle)*mag;
 
+    refRect.x = plyPos->x;
+    refRect.y = plyPos->y;
+
 	if( GetDist( *plyPos, origin ) < mapSize )
 	{
 
@@ -172,15 +187,16 @@ void Player::Move()
         }else if( AABB( bullets.at(i)->GetRect(), &refRect ) )
         {
 
-            glfwTerminate();
+            health-=0.05f;
 
+            Bullet *point = bullets.at( i );
+            bullets.erase( bullets.begin() + i );
+
+            delete point;
 
         }
 
     }
-
-    refRect.x = plyPos->x;
-    refRect.y = plyPos->y;
 
 }
 
