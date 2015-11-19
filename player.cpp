@@ -128,16 +128,17 @@ void Player::KeyOps()
 
 	}
 
-    Coord *tempCord = new Coord( plyPos->x + cos(curAngle)*(PLY_SIZE/2), plyPos->y + sin(curAngle)*(PLY_SIZE/2) );
-
     if( mouseClick )
     {
 
         float varyAng = (rand()%10)-5;
         varyAng = varyAng*(PI/180);
-
-        bullets.push_back( new Bullet( *tempCord, GetInclin( *plyPos, mousePos )+varyAng, 32.0f, mapAccel, mapSize ) );
-
+ 
+        Coord *tempCord = new Coord( plyPos->x+cos(curAngle)*PLY_SIZE, plyPos->y+sin(curAngle)*PLY_SIZE );
+        
+        float finalAng = GetInclin( *tempCord, mousePos )+varyAng;
+       
+        bullets.push_back( new Bullet( *tempCord, finalAng, 32.0f, mapAccel, mapSize ) );
 
     }
 
