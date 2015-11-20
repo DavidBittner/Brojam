@@ -1,7 +1,7 @@
 #ifndef PLAYER_CPP
 #define PLAYER_CPP
 
-#include <GL/glfw3.h>
+#include <GLFW/glfw3.h>
 #include <iostream>
 
 #include <vector>
