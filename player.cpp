@@ -27,6 +27,7 @@ class Player
 			plyPos = new Coord( size, 0.0f );
 			curAngle = 0.0f;
 
+            xVel = 0.0f;
             yVel = 0.0f;
 			mag = 0.0f;
 
@@ -58,6 +59,7 @@ class Player
 		Coord *plyPos;
 		float curAngle;
 
+        float xVel;
 		float yVel;
 		float mag;
 
@@ -112,12 +114,12 @@ void Player::KeyOps()
 	if( keyStates[GLFW_KEY_A] )
 	{
 
-		curAngle+=0.05f*(200.0f/mapSize);
+	    xVel=0.05f*(200.0f/mapSize);
 
 	}else if( keyStates[GLFW_KEY_D] )
 	{
 
-		curAngle-=0.05f*(200.0f/mapSize);
+		xVel=-0.05f*(200.0f/mapSize);
 
 	}
 
@@ -146,6 +148,13 @@ void Player::KeyOps()
 
 void Player::Move()
 {
+
+    if( curAngle >= 2*PI )
+    {
+
+        curAngle = curAngle - 2*PI;
+
+    }
 
 	KeyOps();
 
@@ -193,13 +202,20 @@ void Player::Move()
             Bullet *point = bullets.at( i );
             bullets.erase( bullets.begin() + i );
 
-            curAngle += (cos(point->GetMovAng()))/5.0f;
+            xVel += (cos(point->GetMovAng()))/10.0f;
             yVel += sin(point->GetMovAng())*5.0f;
 
             delete point;
 
         }
 
+    }
+
+    curAngle+=xVel;
+    
+    if( xVel != 0.0f )
+    {
+        xVel = xVel/1.5f;
     }
 
 }

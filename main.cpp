@@ -5,6 +5,8 @@
 #include "planet.cpp"
 #include "player.cpp"
 
+#include "enemy.cpp"
+
 const int WIND_WIDTH = 800;
 const int WIND_HEIGHT = 600;
 
@@ -36,6 +38,8 @@ int main()
 	Planet TempPlanet( size, gravity );
 	Player TempPlayer( TempPlanet.GetSize(), TempPlanet.GetMass() );
 
+    Enemy *Test = new Enemy( 0, size );
+
     //Point the camera to the player's position.
 	camera = TempPlayer.GetPos();
 
@@ -53,6 +57,8 @@ int main()
 		glTranslatef( -camera->x, -camera->y, -1.0f );
 
 		TempPlayer.Draw();
+        Test->Move( 0.0f );
+        Test->Draw();
 
         TempPlayer.Move();
 		TempPlanet.Draw();
