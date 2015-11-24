@@ -2,7 +2,7 @@
 #define GLFW_FUNCS
 
 #include <cmath>
-#include <GL/glfw3.h>
+#include <GLFW/glfw3.h>
 
 #include <iostream>
 

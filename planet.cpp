@@ -1,7 +1,7 @@
 #ifndef CIRC_CPP
 #define CIRC_CPP
 
-#include <GL/glfw3.h>
+#include <GLFW/glfw3.h>
 #include <cmath>
 #include <vector>
 
