@@ -28,6 +28,7 @@ class Enemy
         }
 
         void Draw();
+
         void Move( float plyAng )
         {
 
@@ -36,10 +37,11 @@ class Enemy
             corners.push_back( Coord( PLY_SIZE, -PLY_SIZE/2 ) );
             corners.push_back( Coord( PLY_SIZE, PLY_SIZE/2 ) );
 
-
         }
 
         float getHealth();
+
+        Rect GetRect(){ return HitLoc; }
 
     private:
         Coord EnemyPos;

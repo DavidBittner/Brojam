@@ -113,10 +113,13 @@ void Player::KeyOps()
 
 	    xVel=0.05f*(200.0f/mapSize);
 
+        xVel = xVel*( mapSize/GetDist(*plyPos, Coord( 0, 0 ) ) );
+
 	}else if( keyStates[GLFW_KEY_D] )
 	{
 
 		xVel=-0.05f*(200.0f/mapSize);
+        xVel = xVel*( mapSize/GetDist(*plyPos, Coord( 0, 0 ) ) );
 
 	}
 
@@ -130,14 +133,17 @@ void Player::KeyOps()
     if( mouseClick )
     {
 
-        float varyAng = (rand()%10)-5;
-        varyAng = varyAng*(PI/180);
- 
-        Coord *tempCord = new Coord( plyPos->x+cos(curAngle)*PLY_SIZE, plyPos->y+sin(curAngle)*PLY_SIZE );
+        float playerToMouse = GetInclin( *plyPos, mousePos );
         
-        float finalAng = GetInclin( *tempCord, mousePos )+varyAng;
-       
-        bullets.push_back( new Bullet( *tempCord, finalAng, 32.0f, mapAccel, mapSize ) );
+        float xMod = cos( curAngle ) * (PLY_SIZE/2.0f);
+        float yMod = sin( curAngle ) * (PLY_SIZE/2.0f);
+
+        const float reduceConst = 1.4f;
+
+        Coord tempPos = Coord( (plyPos->x + cos( playerToMouse )*(PLY_SIZE/reduceConst))+xMod,
+                               (plyPos->y + sin( playerToMouse )*(PLY_SIZE/reduceConst))+yMod);
+
+        bullets.push_back( new Bullet( tempPos, playerToMouse, 32.0f, mapAccel, mapSize ) );
 
     }
 
@@ -191,13 +197,12 @@ void Player::Move()
         }else if( AABB( bullets.at(i)->GetRect(), &refRect ) )
         {
 
-            health-=0.05f;
+            health-=0.2f;
 
             Bullet *point = bullets.at( i );
             bullets.erase( bullets.begin() + i );
 
-            xVel += (cos(point->GetMovAng()))/10.0f;
-            yVel += sin(point->GetMovAng())*5.0f;
+            xVel += point->GetMovAng()/10.0f;
 
             delete point;
 
