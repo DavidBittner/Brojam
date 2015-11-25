@@ -53,6 +53,7 @@ class Player
 		void KeyOps();
 
         std::vector< Bullet* > bullets;
+        std::vector< Coord > corners;
 
         Rect refRect;
 
@@ -76,16 +77,8 @@ void Player::Draw()
 	std::vector< float > verts;
     std::vector< float > colors;
 
-	std::vector< Coord > corners;
-	corners.push_back( Coord( 0, PLY_SIZE/2 ) );
-	corners.push_back( Coord( 0, -PLY_SIZE/2 ) );
-	corners.push_back( Coord( PLY_SIZE, -PLY_SIZE/2 ) );
-	corners.push_back( Coord( PLY_SIZE, PLY_SIZE/2 ) );
-
 	for( int i = 0; i < 4; i++ )
 	{
-
-		corners.at(i) = RotateVector( corners.at(i), curAngle );
 
 		verts.push_back( corners.at(i).x+plyPos->x );
 		verts.push_back( corners.at(i).y+plyPos->y );
@@ -96,6 +89,8 @@ void Player::Draw()
 
 	}
 
+    corners.clear();
+
     glEnableClientState( GL_VERTEX_ARRAY );
     glEnableClientState( GL_COLOR_ARRAY );
 
@@ -105,6 +100,8 @@ void Player::Draw()
 	
 	glDisableClientState( GL_VERTEX_ARRAY );
     glDisableClientState( GL_COLOR_ARRAY );
+
+    verts.clear();
 
 }
 
@@ -166,9 +163,6 @@ void Player::Move()
 	plyPos->x = (cos( curAngle )*mapSize)+cos(curAngle)*mag;
 	plyPos->y = (sin( curAngle )*mapSize)+sin(curAngle)*mag;
 
-    refRect.x = plyPos->x;
-    refRect.y = plyPos->y;
-
 	if( GetDist( *plyPos, origin ) < mapSize )
 	{
 
@@ -217,6 +211,63 @@ void Player::Move()
     {
         xVel = xVel/1.5f;
     }
+    
+    corners.push_back( Coord( 0, PLY_SIZE/2 ) );
+	corners.push_back( Coord( 0, -PLY_SIZE/2 ) );
+	corners.push_back( Coord( PLY_SIZE, -PLY_SIZE/2 ) );
+	corners.push_back( Coord( PLY_SIZE, PLY_SIZE/2 ) );
+
+    float xmax, ymax;
+    float xmin, ymin;
+
+    for( int i = 0; i < 4; i++ )
+    {
+
+        corners.at(i) = RotateVector( corners.at(i), curAngle );
+
+        if( !i )
+        {
+
+            xmax = corners.at(i).x; xmin = corners.at(i).x;
+            ymax = corners.at(i).x; ymin = corners.at(i).y;
+
+        }
+
+        if( corners.at(i).x < xmin )
+        {
+
+            xmin = corners.at(i).x;
+
+        }
+
+        if( corners.at(i).x > xmax )
+        {
+
+            xmax = corners.at(i).x;
+
+        }
+
+        if( corners.at(i).y < ymin )
+        {
+
+            ymin = corners.at(i).y;
+
+        }
+
+        if( corners.at(i).y > ymax )
+        {
+
+            ymax = corners.at(i).y;
+
+        }
+
+    }
+
+    refRect.x = xmin + plyPos->x;
+    refRect.y = ymin + plyPos->y;
+
+    refRect.w = xmax-xmin;
+    refRect.h = ymax-ymin;
 
 }
 

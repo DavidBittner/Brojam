@@ -56,11 +56,12 @@ int main()
 
 		glTranslatef( -camera->x, -camera->y, -1.0f );
 
-		TempPlayer.Draw();
         Test->Move( 0.0f );
         Test->Draw();
 
         TempPlayer.Move();
+        TempPlayer.Draw();
+
 		TempPlanet.Draw();
 
 		ResetKeys();
