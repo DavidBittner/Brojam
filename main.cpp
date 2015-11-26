@@ -38,7 +38,7 @@ int main()
 	Planet TempPlanet( size, gravity );
 	Player TempPlayer( TempPlanet.GetSize(), TempPlanet.GetMass() );
 
-    Enemy *Test = new Enemy( 0, size );
+    Enemy *Test = new Enemy( TempPlayer.GetAng(), size );
 
     //Point the camera to the player's position.
 	camera = TempPlayer.GetPos();
@@ -56,7 +56,7 @@ int main()
 
 		glTranslatef( -camera->x, -camera->y, -1.0f );
 
-        Test->Move( 0.0f );
+        Test->Move();
         Test->Draw();
 
         TempPlayer.Move();

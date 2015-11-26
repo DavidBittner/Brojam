@@ -128,6 +128,31 @@ float GetInclin( Coord a, Coord b )
 
 }
 
+float NormalizeAng( float ang )
+{
+
+    while( ang < 0.0f )
+    {
+
+        ang+=(2*PI);
+
+    }
+    while( ang > (2*PI) )
+    {
+
+        ang-=(2*PI);
+
+    }
+
+    if( ang == 2*PI )
+    {
+        ang = 0.0f;
+    }
+
+    return ang;
+
+}
+
 Coord RotateVector( Coord in, float rotationangle )
 {
 

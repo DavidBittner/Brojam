@@ -38,6 +38,8 @@ class Player
 
 		};
 
+        float *GetAng(){ return &curAngle; }
+
 		//Function for handling moving code
 		void Move();
 
@@ -273,6 +275,8 @@ void Player::Move()
 
     refRect.w = xmax-xmin;
     refRect.h = ymax-ymin;
+
+    curAngle = NormalizeAng( curAngle );
 
 }
 

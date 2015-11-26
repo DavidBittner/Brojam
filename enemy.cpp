@@ -11,10 +11,14 @@ class Enemy
 {
 
     public:
-        Enemy( float plyAng, float mapSize ) : EnemyPos( 0, 0 ), HitLoc( 0, 0 )
+        Enemy( float *plyAng, float mapSize ) : EnemyPos( 0, 0 ), HitLoc( 0, 0 )
         {
 
-            float genAng = (((rand()%180)+90)*(PI/180))+plyAng;  
+            direction = rand()%2;
+            this->mapSize = mapSize;
+            this->plyAng = plyAng;
+
+            float genAng = (((rand()%180)+90)*(PI/180))+(*plyAng);  
             curAng = genAng;
             
             EnemyPos.x = cos(genAng)*mapSize;
@@ -29,13 +33,33 @@ class Enemy
 
         void Draw();
 
-        void Move( float plyAng )
+        void Move()
         {
 
             corners.push_back( Coord( 0, ENEMY_SIZE/2 ) );
             corners.push_back( Coord( 0, -PLY_SIZE/2 ) );
             corners.push_back( Coord( PLY_SIZE, -PLY_SIZE/2 ) );
             corners.push_back( Coord( PLY_SIZE, PLY_SIZE/2 ) );
+ 
+            float newAng = curAng - *plyAng;
+            newAng = NormalizeAng( newAng );
+
+            if( newAng > PI  )
+            {
+
+                curAng+=0.005f;
+
+            }else
+            {
+
+                curAng-=0.005f;
+
+            }
+
+            EnemyPos.x = cos(curAng)*mapSize;
+            EnemyPos.y = sin(curAng)*mapSize;
+
+            curAng = NormalizeAng( curAng );
 
         }
 
@@ -49,6 +73,10 @@ class Enemy
 
         float isAlive;
         float curAng;
+        float *plyAng;
+
+        float mapSize;
+        bool direction;
 
         std::vector<Coord> corners;
 
