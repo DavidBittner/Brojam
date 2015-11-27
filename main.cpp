@@ -38,8 +38,6 @@ int main()
 	Planet TempPlanet( size, gravity );
 	Player TempPlayer( TempPlanet.GetSize(), TempPlanet.GetMass() );
 
-    Enemy *Test = new Enemy( TempPlayer.GetAng(), size );
-
     //Point the camera to the player's position.
 	camera = TempPlayer.GetPos();
 
@@ -54,14 +52,11 @@ int main()
 		glClear( GL_COLOR_BUFFER_BIT );
 		glLoadIdentity();
 
+        TempPlayer.Move();
+
 		glTranslatef( -camera->x, -camera->y, -1.0f );
 
-        Test->Move();
-        Test->Draw();
-
-        TempPlayer.Move();
         TempPlayer.Draw();
-
 		TempPlanet.Draw();
 
 		ResetKeys();
@@ -73,7 +68,8 @@ int main()
 		if( etime - stime < 1000.0f/FRAMES_PER_SECOND )
 		{
 
-			std::this_thread::sleep_for( std::chrono::milliseconds( (int)((1000/FRAMES_PER_SECOND)-(etime-stime) )) );
+            int timeDelay = (1000.0f/FRAMES_PER_SECOND)-(etime-stime);
+			std::this_thread::sleep_for( std::chrono::milliseconds( timeDelay ) );
 
 		}
 

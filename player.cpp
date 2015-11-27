@@ -3,11 +3,13 @@
 
 #include <GLFW/glfw3.h>
 #include <iostream>
-
 #include <vector>
+#include <thread>
+#include <mutex>
 
 #include "coord.cpp"
 #include "bullet.cpp"
+#include "enemy.cpp"
 
 static const int PLY_SIZE = 32;
 
@@ -36,6 +38,8 @@ class Player
 
             health = 1.0f;
 
+            createThread = new std::thread( &Player::CreateEnemy, this );
+
 		};
 
         float *GetAng(){ return &curAngle; }
@@ -53,9 +57,14 @@ class Player
 	private:
 
 		void KeyOps();
+        void CreateEnemy();
 
         std::vector< Bullet* > bullets;
         std::vector< Coord > corners;
+
+        std::vector< Enemy > enemies;
+
+        std::thread *createThread;
 
         Rect refRect;
 
@@ -93,6 +102,20 @@ void Player::Draw()
 
     corners.clear();
 
+    for( Enemy i : enemies )
+    {
+
+        i.Draw();
+
+    }
+
+    for( unsigned i = 0; i < bullets.size(); i++ )
+    {
+
+        bullets.at(i)->Draw();
+
+    }
+
     glEnableClientState( GL_VERTEX_ARRAY );
     glEnableClientState( GL_COLOR_ARRAY );
 
@@ -104,6 +127,24 @@ void Player::Draw()
     glDisableClientState( GL_COLOR_ARRAY );
 
     verts.clear();
+
+}
+
+void Player::CreateEnemy()
+{
+
+    std::mutex mtx;
+
+    while( true )
+    {
+
+        mtx.lock();
+        enemies.push_back( Enemy( &curAngle, mapSize ) );
+        mtx.unlock();
+
+        std::this_thread::sleep_for( std::chrono::seconds( 8 ) );
+
+    }
 
 }
 
@@ -182,11 +223,10 @@ void Player::Move()
 
 	}
 
-    for( int i = 0; i < bullets.size(); i++ )
+    for( unsigned i = 0; i < bullets.size(); i++ )
     {
 
         bullets.at(i)->Move();
-        bullets.at(i)->Draw();
 
         if( GetDist( *bullets.at(i)->GetPos(), Coord( 0, 0 ) ) < mapSize )
         {
@@ -277,6 +317,13 @@ void Player::Move()
     refRect.h = ymax-ymin;
 
     curAngle = NormalizeAng( curAngle );
+
+    for( int i = 0; i < enemies.size(); i++ )
+    {
+
+        enemies.at(i).Move();
+
+    }
 
 }
 

@@ -37,9 +37,9 @@ class Enemy
         {
 
             corners.push_back( Coord( 0, ENEMY_SIZE/2 ) );
-            corners.push_back( Coord( 0, -PLY_SIZE/2 ) );
-            corners.push_back( Coord( PLY_SIZE, -PLY_SIZE/2 ) );
-            corners.push_back( Coord( PLY_SIZE, PLY_SIZE/2 ) );
+            corners.push_back( Coord( 0, -ENEMY_SIZE/2 ) );
+            corners.push_back( Coord( ENEMY_SIZE, -ENEMY_SIZE/2 ) );
+            corners.push_back( Coord( ENEMY_SIZE, ENEMY_SIZE/2 ) );
  
             float newAng = curAng - *plyAng;
             newAng = NormalizeAng( newAng );
