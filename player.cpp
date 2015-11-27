@@ -102,12 +102,15 @@ void Player::Draw()
 
     corners.clear();
 
-    for( Enemy i : enemies )
+    std::mutex mtx;
+    mtx.lock();
+    for( unsigned i = 0; i < enemies.size(); i++ )
     {
 
-        i.Draw();
+        enemies.at(i).Draw();
 
     }
+    mtx.unlock();
 
     for( unsigned i = 0; i < bullets.size(); i++ )
     {
@@ -195,13 +198,6 @@ void Player::KeyOps()
 void Player::Move()
 {
 
-    if( curAngle >= 2*PI )
-    {
-
-        curAngle = curAngle - 2*PI;
-
-    }
-
 	KeyOps();
 
 	yVel -= mapAccel/6.0f;
@@ -223,6 +219,8 @@ void Player::Move()
 
 	}
 
+    std::mutex mtx;
+    mtx.lock();
     for( unsigned i = 0; i < bullets.size(); i++ )
     {
 
@@ -248,9 +246,32 @@ void Player::Move()
 
             delete point;
 
+        }else
+        {
+
+            for( unsigned j = 0; j < enemies.size(); j++ )
+            {
+
+                if( AABB( bullets.at(i)->GetRect(), enemies.at(j).GetRect() ) )
+                {
+
+                    Bullet *point = bullets.at(i);
+                    bullets.erase( bullets.begin() + i );
+
+                    delete point;
+
+                    enemies.erase( enemies.begin() + j );
+                    j--;
+                    i--;
+
+                }
+
+            }
+
         }
 
     }
+    mtx.unlock();
 
     curAngle+=xVel;
     
@@ -318,12 +339,14 @@ void Player::Move()
 
     curAngle = NormalizeAng( curAngle );
 
-    for( int i = 0; i < enemies.size(); i++ )
+    mtx.lock();
+    for( unsigned i = 0; i < enemies.size(); i++ )
     {
 
         enemies.at(i).Move();
 
     }
+    mtx.unlock();
 
 }
 
