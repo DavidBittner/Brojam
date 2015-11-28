@@ -36,28 +36,97 @@ int main()
     int gravity = (rand()%8)+2;
 
 	Planet TempPlanet( size, gravity );
-	Player TempPlayer( TempPlanet.GetSize(), TempPlanet.GetMass() );
+	Player *TempPlayer = new Player( TempPlanet.GetSize(), TempPlanet.GetMass() );
 
     //Point the camera to the player's position.
-	camera = TempPlayer.GetPos();
+	camera = TempPlayer->GetPos();
 
     //Just for frame capping.
 	float stime = 0.0f, etime = 0.0f;
+    float fade = 0.0f;
+
+    glEnable( GL_BLEND );
 
 	while( !glfwWindowShouldClose( window ) )
 	{
-
-		stime = glfwGetTime();
+        
+        stime = glfwGetTime();
 
 		glClear( GL_COLOR_BUFFER_BIT );
+        glEnable( GL_BLEND );
+        glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 		glLoadIdentity();
+        
+        if( !TempPlayer->Lost() )
+        {
+        
+            TempPlayer->Move();
 
-        TempPlayer.Move();
+            if( fade > 0.0f )
+            {
 
+                fade-=0.01f;
+
+            }
+
+        }else
+        {
+
+            fade += 0.01f;
+         
+        }
+
+        glPushMatrix();
 		glTranslatef( -camera->x, -camera->y, -1.0f );
 
-        TempPlayer.Draw();
+        TempPlayer->Draw();
 		TempPlanet.Draw();
+        glPopMatrix();
+
+        if( fade > 0.0f )
+        {
+
+            if( fade > 1.1f )
+            {
+
+                TempPlayer->Reset();
+                TempPlayer = new Player( TempPlanet.GetSize(), TempPlanet.GetMass() );
+                camera = TempPlayer->GetPos();
+
+            }
+
+            glTranslatef( 0.0f, 0.0f, -1.0f );
+            int w, h;
+            glfwGetWindowSize( window, &w, &h );
+
+            float verts[] =
+            {
+                -w/2.0f, -h/2.0f,
+                w/2.0f, -h/2.0f,
+                w/2.0f, h/2.0f,
+                -w/2.0f, h/2.0f
+            };
+
+            float colors[] = 
+            {
+                0.0f, 0.0f, 0.0f, fade,
+                0.0f, 0.0f, 0.0f, fade,
+                0.0f, 0.0f, 0.0f, fade,
+                0.0f, 0.0f, 0.0f, fade
+            };
+
+            glEnableClientState( GL_VERTEX_ARRAY );
+            glEnableClientState( GL_COLOR_ARRAY );
+
+            glVertexPointer( 2, GL_FLOAT, 0, verts );
+            glColorPointer( 4, GL_FLOAT, 0, colors );
+
+            glDrawArrays( GL_TRIANGLE_FAN, 0, 4 );
+
+            glDisableClientState( GL_VERTEX_ARRAY );
+            glDisableClientState( GL_COLOR_ARRAY );
+
+        }
 
 		ResetKeys();
 		glfwPollEvents();
@@ -81,6 +150,8 @@ int main()
             frame = 0;
 
         }
+
+        glDisable( GL_BLEND );
 
 	}
 

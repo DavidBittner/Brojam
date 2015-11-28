@@ -54,6 +54,9 @@ class Player
 
 		void Draw();
 
+        void Reset();
+        bool Lost(){ return ( health <= 0.0f ); }
+
 	private:
 
 		void KeyOps();
@@ -85,10 +88,27 @@ class Player
 void Player::Draw()
 {
 
+    if( health <= 0.0f )
+    {
+
+        corners.push_back( Coord( 0, PLY_SIZE/2 ) );
+        corners.push_back( Coord( 0, -PLY_SIZE/2 ) );
+        corners.push_back( Coord( PLY_SIZE, -PLY_SIZE/2 ) );
+        corners.push_back( Coord( PLY_SIZE, PLY_SIZE/2 ) );
+        
+        for( unsigned i = 0; i < corners.size(); i++ )
+        {
+
+            corners.at(i) = RotateVector( corners.at(i), curAngle );
+
+        }
+
+    }
+
 	std::vector< float > verts;
     std::vector< float > colors;
 
-	for( int i = 0; i < 4; i++ )
+	for( unsigned i = 0; i < corners.size(); i++ )
 	{
 
 		verts.push_back( corners.at(i).x+plyPos->x );
@@ -102,23 +122,27 @@ void Player::Draw()
 
     corners.clear();
 
-    std::mutex mtx;
-    mtx.lock();
-    for( unsigned i = 0; i < enemies.size(); i++ )
+    if( health >= 0.0f )
     {
+     
+        std::mutex mtx;
+        mtx.lock();
+        for( unsigned i = 0; i < enemies.size(); i++ )
+        {
 
-        enemies.at(i).Draw();
+            enemies.at(i).Draw();
+
+        }
+        mtx.unlock();
+
+        for( unsigned i = 0; i < bullets.size(); i++ )
+        {
+
+            bullets.at(i)->Draw();
+
+        }
 
     }
-    mtx.unlock();
-
-    for( unsigned i = 0; i < bullets.size(); i++ )
-    {
-
-        bullets.at(i)->Draw();
-
-    }
-
     glEnableClientState( GL_VERTEX_ARRAY );
     glEnableClientState( GL_COLOR_ARRAY );
 
@@ -130,6 +154,23 @@ void Player::Draw()
     glDisableClientState( GL_COLOR_ARRAY );
 
     verts.clear();
+
+}
+
+void Player::Reset()
+{
+
+    for( unsigned i = 0; i < bullets.size(); i++ )
+    {
+    
+        Bullet *temp = bullets.at(i);
+        bullets.erase( bullets.begin() + i );
+
+        delete temp;
+
+    }
+
+    //delete createThread;
 
 }
 
@@ -145,7 +186,7 @@ void Player::CreateEnemy()
         enemies.push_back( Enemy( &curAngle, mapSize ) );
         mtx.unlock();
 
-        std::this_thread::sleep_for( std::chrono::seconds( 8 ) );
+        std::this_thread::sleep_for( std::chrono::seconds( 4 ) );
 
     }
 
@@ -217,7 +258,7 @@ void Player::Move()
 		plyPos->x = (cos( curAngle )*mapSize)+cos(curAngle)*mag;
 		plyPos->y = (sin( curAngle )*mapSize)+sin(curAngle)*mag;
 
-	}
+    }
 
     std::mutex mtx;
     mtx.lock();
@@ -271,6 +312,19 @@ void Player::Move()
         }
 
     }
+    for( unsigned i = 0; i < enemies.size(); i++ )
+    {
+
+        if( AABB( enemies.at(i).GetRect(), &refRect ) )
+        {
+
+            health = -1.0f;
+            break;
+
+        }
+
+    }
+
     mtx.unlock();
 
     curAngle+=xVel;
