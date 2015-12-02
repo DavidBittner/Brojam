@@ -296,14 +296,17 @@ void Player::Move()
                 if( AABB( bullets.at(i)->GetRect(), enemies.at(j).GetRect() ) )
                 {
 
-                    Bullet *point = bullets.at(i);
-                    bullets.erase( bullets.begin() + i );
+                    if( bullets.size() > 0 && enemies.size() > 0 )
+                    {
+                        Bullet *point = bullets.at(i);
+                        bullets.erase( bullets.begin() + i );
 
-                    delete point;
+                        delete point;
 
-                    enemies.erase( enemies.begin() + j );
-                    j--;
-                    i--;
+                        enemies.erase( enemies.begin() + j );
+                        j--;
+                        i--;
+                    }
 
                 }
 

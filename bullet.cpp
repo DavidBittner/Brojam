@@ -87,7 +87,7 @@ void Bullet::Draw()
     float xmin, xmax;
     float ymin, ymax;
 
-    for( int i = 0; i < 4; i++ )
+    for( unsigned i = 0; i < corners.size(); i++ )
     {
 
         corners.at(i) = RotateVector( corners.at(i), tempAng );
